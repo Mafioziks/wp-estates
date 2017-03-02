@@ -10,24 +10,79 @@
  * Text Domain: estates
  */
 
+include "EstateSearchWidget.php";
+
 // Add estate post type
 
 function addEstatePostType() {
-	register_post_type('estate',
-                       [
-                           'labels'      => [
-                               'name'          => _('Estates'),
-                               'singular_name' => _('Estate'),
-                           ],
-                           'public'      => true,
-                           'has_archive' => true,
-                           'rewrite'     => ['slug' => 'estates'],
-                           'supports'    => array( 'title', 'thumbnail', 'editor' ),
-                           'menu_icon'   => 'dashicons-store',
-                       	   'taxonomies'    => array('category', 'post_tag'),
-                       	   'capability_type' => 'post',
-                       ]
+
+    register_post_type('estate',
+        [
+            'labels'      => [
+                'name'          => __('Estates', 'estate'),
+                'singular_name' => __('Estate', 'estate'),
+            ],
+            'public'      => true,
+            'has_archive' => true,
+            'rewrite'     => ['slug' => 'estates'],
+            'supports'    => array( 'title', 'thumbnail', 'editor' ),
+            'menu_icon'   => 'dashicons-store',
+            'taxonomies'    => array('category', 'post_tag'),
+            'capability_type' => 'post',
+        ]
     );
+        
+    // Add new taxonomy - serie
+	$labels_serie = array(
+			'name'              => _x( 'Estate Series', 'taxonomy general name', 'estate' ),
+			'singular_name'     => _x( 'Estate Serie', 'taxonomy singular name', 'estate' ),
+			'search_items'      => __( 'Search Estate Series', 'estate' ),
+			'all_items'         => __( 'All Estate Series', 'estate' ),
+			'parent_item'       => __( 'Parent Estate Serie', 'estate' ),
+			'parent_item_colon' => __( 'Parent Estate Serie:', 'estate' ),
+			'edit_item'         => __( 'Edit Estate Serie', 'estate' ),
+			'update_item'       => __( 'Update Estate Serie', 'estate' ),
+			'add_new_item'      => __( 'Add New Estate Serie', 'estate' ),
+			'new_item_name'     => __( 'New Estate Serie Name', 'estate' ),
+			'menu_name'         => __( 'Estate Serie', 'estate' ),
+	);
+	
+	$args_serie = array(
+			'hierarchical'      => true,
+			'labels'            => $labels_serie,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'estate_serie' ),
+	);
+	
+	register_taxonomy( 'estate_serie', array( 'estate' ), $args_serie );
+	
+	// Add new taxonomy - type
+	$labels_type = array(
+			'name'              => _x( 'Estate Types', 'taxonomy general name', 'estate' ),
+			'singular_name'     => _x( 'Estate Type', 'taxonomy singular name', 'estate' ),
+			'search_items'      => __( 'Search Estate Types', 'estate' ),
+			'all_items'         => __( 'All Estate Types', 'estate' ),
+			'parent_item'       => __( 'Parent Estate Type', 'estate' ),
+			'parent_item_colon' => __( 'Parent Estate Type:', 'estate' ),
+			'edit_item'         => __( 'Edit Estate Type', 'estate' ),
+			'update_item'       => __( 'Update Estate Type', 'estate' ),
+			'add_new_item'      => __( 'Add New Estate Type', 'estate' ),
+			'new_item_name'     => __( 'New Estate Type Name', 'estate' ),
+			'menu_name'         => __( 'Estate Type', 'estate' ),
+	);
+	
+	$args_type = array(
+			'hierarchical'      => true,
+			'labels'            => $labels_type,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'query_var'         => true,
+			'rewrite'           => array( 'slug' => 'estate_type' ),
+	);
+	
+	register_taxonomy( 'estate_type', array( 'estate' ), $args_type );
 }
 
 // register_activation_hook( __FILE__, 'addEstatePostType' );
@@ -37,24 +92,18 @@ add_action('init', 'addEstatePostType');
 // Add metadata boxes
 
 function admin_init(){
-  add_meta_box("info-meta", _("Information"), "price", "estate", "side", "low");
-  add_meta_box("coordinates-meta", _("Coordinates"), "coordinates", "estate", "side", "low");
-  add_meta_box("address_meta", _("Location"), "address_meta", "estate", "normal", "low");
+  add_meta_box("info-meta", __("Information", 'estate'), "price", "estate", "side", "low");
+  add_meta_box("coordinates-meta", __("Coordinates", 'estate'), "coordinates", "estate", "side", "low");
+  add_meta_box("address_meta", __("Location", 'estate'), "address_meta", "estate", "normal", "low");
 }
  
 function price(){
   global $post;
   $custom = get_post_custom($post->ID);
-  $type = $custom["type"][0];
   $price = $custom["price"][0];
   $roomCount = $custom["room_count"][0];
   $floor = $custom["floor"][0];
-  $serie = $custom["serie"][0];
   ?>
-  	<div>
-	  <label><?php _e("Type"); ?>:</label><br>
-	  <input name="type" value="<?php echo $type; ?>" />
-	</div>
   	<div>
 	  <label><?php _e("Price"); ?>:</label><br>
 	  <input name="price" value="<?php echo $price; ?>" />
@@ -66,10 +115,6 @@ function price(){
 	<div>
 	  <label><?php _e("Floor"); ?>:</label><br>
 	  <input name="floor" value="<?php echo $floor; ?>" />
-	</div>
-	<div>
-	  <label><?php _e("Serie"); ?>:</label><br>
-	  <input name="serie" value="<?php echo $serie; ?>" />
 	</div>	
   <?php
 }
@@ -113,7 +158,7 @@ add_action("admin_init", "admin_init");
 // Load language
 
 function wan_load_textdomain() {
-	load_plugin_textdomain( 'estate', false, dirname( plugin_basename(__FILE__) ) . '/lang/' );
+	load_plugin_textdomain( 'estate', false, '/lang/' );
 }
 
 add_action('plugins_loaded', 'wan_load_textdomain');
@@ -170,4 +215,11 @@ function estate_custom_columns($column){
 }
 
 add_action("manage_posts_custom_column",  "estate_custom_columns");
+
 add_filter("manage_edit-estate_columns", "estate_edit_columns");
+
+function register_search(){
+	register_widget("EstateSearchWidget");
+}
+
+add_action('widgets_init', "register_search");
