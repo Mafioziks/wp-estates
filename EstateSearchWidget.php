@@ -90,33 +90,56 @@ class EstateSearchWidget extends WP_Widget {
 		) );
 		
 		?>
-		<form role="search" method="get" id="searchform" action="/">
+		<form id="estate-search" role="search" method="get" id="searchform" action="/">
+			<input type="hidden" value="estate" name="post_type" />
 			<div>
-				<label for="s">Search for:</label>
-				<input type="text" value="" name="s" id="s" />
-				<input type="hidden" value="estate" name="post_type" />
-				<label>Īpašuma veids:</label>
-				<select>
-					<?php foreach ($estateType as $type): ?>
-					<option><?php echo $type->name; ?></option>
-					<?php endforeach;?>
-				</select>
-				<label>Platība</label>
-				<label>Min:</label><input type="number" min="0" /><label> - </label><label>Max:</label><input type="number" min="0" />
-				<label>Cena:</label>
-				<label>Min:</label><input type="number" min="0" /><label> - </label><label>Max:</label><input type="number" min="0" /><label>EUR</label>
-				<label>Sērija:</label>
-				<select>
-					<?php foreach ($estateSerie as $serie): ?>
-					<option><?php echo $serie->name; ?></option>
-					<?php endforeach;?>
-				</select>
-				<label>Izstabu skaits:</label>
-				<label>Min:</label><input type="number" min="0" /><label> - </label><label>Max:</label><input type="number" min="0" />
-				<label>Stāvs</label>
-				<label>Min:</label><input type="number" id="floor" min="0" max="16" /><label> - </label><label>Max:</label><input type="number" min="0" />
-				<input type="submit" id="searchsubmit" value="Search" />
-				
+				<h2><?php echo $text; ?></h2>
+				<div>
+					<label for="s"><?php echo __('Meklēt: ', 'textdomain'); ?></label>
+					<input type="text" value="" name="s" id="s" />
+					<input type="submit" id="searchsubmit" value="<?php echo __('Meklēt', 'textdomain'); ?>" />
+					<div class="clear"></div>
+				</div>
+				<div>
+					<div class="column">
+						<div>
+							<label class="field-title">Īpašuma veids:</label>
+							<select>
+								<?php foreach ($estateType as $type): ?>
+								<option><?php echo $type->name; ?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+						<div>
+							<label class="field-title">Platība</label>
+							<input type="number" min="0" placeholder="Min"/><label> - </label><input type="number" min="0" placeholder="Max"/>
+						</div>
+					</div>
+					<div class="column">
+						<div>
+							<label class="field-title">Sērija:</label>
+							<select>
+								<?php foreach ($estateSerie as $serie): ?>
+								<option><?php echo $serie->name; ?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+						<div>
+							<label class="field-title">Cena:</label>
+							<input type="number" min="0"  placeholder="Min"/><label> - </label><input type="number" min="0" placeholder="Max"/><label>EUR</label>
+						</div>
+					</div>
+					<div class="column">
+						<div>
+							<label class="field-title">Izstabu skaits:</label>
+							<input type="number" min="0"  placeholder="Min"/><label> - </label><input type="number" min="0" placeholder="Max"/>
+						</div>
+						<div>
+							<label class="field-title">Stāvs</label>
+							<input type="number" id="floor" min="0" max="16"  placeholder="Min"/><label> - </label><input type="number" min="0" placeholder="Max"/>
+						</div>
+					</div>
+				</div>
 			</div>
 		</form>
 		<?php
