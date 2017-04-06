@@ -110,7 +110,7 @@ class EstateSearchWidget extends WP_Widget {
 		foreach ($estateResidentals as $residental) {
 			$residentals[] = $residental->name;
 		}
-		
+				
 		?>
 		<form id="estate-search" role="search" method="get" id="searchform" action="/">
 			<input type="hidden" value="estate" name="post_type" />
@@ -130,11 +130,11 @@ class EstateSearchWidget extends WP_Widget {
 					</div>
 					<div class="column">
 						<?php $this->createDropdown('region', __('City/Region', 'estate'), $regions, "Rīga")?>
-						<?php $this->createDropdown('estate_serie', __('Serie', 'estate'), $series, ($_GET['type'] == 'Dzīvoklis' || empty($_GET['type'])) ? 'display: block;' : 'display: none;')?>
+						<?php $this->createDropdown('estate_serie', __('Serie', 'estate'), $series, "",($_GET['estate_type'] == 'Dzīvoklis' || !isset($_GET['estate_type'])) ? 'display: block;' : 'display: none;')?>
 						<?php $this->createMinMaxField('price', __('Price', 'estate'), 0); ?>
 					</div>
 					<div class="column">
-						<?php $this->createDropdown('residental', __('Residental complex', 'estate'), $residentals, "", ($_GET['region'] == 'Riga' || empty($_GET['region'])) ? 'display: block;' : 'display: none;')?>
+						<?php $this->createDropdown('residental', __('Residental complex', 'estate'), $residentals, "", ($_GET['region'] == 'Riga' || !isset($_GET['region'])) ? 'display: block;' : 'display: none;')?>
 						<?php $this->createMinMaxField('rooms', __('Rooms', 'estate'), 0); ?>
 						<?php $this->createMinMaxField('floor', __('Floor', 'estate'), 0); ?>
 					</div>
@@ -175,9 +175,9 @@ class EstateSearchWidget extends WP_Widget {
 		<div id="<?= $name ?>" style="<?= $style ?>">
 			<label class="field-title"><?= $title ?></label>
 			<select name="<?= $name ?>">
-				<option value="all" <?= $selected == "all" ? 'selected' : '' ?>><?= __('Search all', 'estate') ?></option>
+				<option value="" <?= isset($_GET[$name]) && empty($selected) ? 'selected' : '' ?>><?= __('Search all', 'estate') ?></option>
 				<?php foreach ($values as $value): ?>
-				<option value="<?= $value ?>" <?= ($value == $selected) || (empty($selected) && $value == $default) ? 'selected' : '' ?>><?= $value ?></option>
+				<option value="<?= $value ?>" <?= ($value == $selected) || ($_GET[$name] === null && $value == $default) ? 'selected' : '' ?>><?= $value ?></option>
 				<?php endforeach;?>
 			</select>
 		</div>
