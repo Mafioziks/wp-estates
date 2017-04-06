@@ -224,7 +224,7 @@ function save_details(){
 	global $post;
 
 	update_post_meta($post->ID, "type", $_POST["type"]);
-	update_post_meta($post->ID, "room_count", $_POST["rooms"]);
+	update_post_meta($post->ID, "rooms", $_POST["rooms"]);
 	update_post_meta($post->ID, "price", $_POST["price"]);
 	update_post_meta($post->ID, "serie", $_POST["serie"]);
 	update_post_meta($post->ID, "floor", $_POST["floor"]);
