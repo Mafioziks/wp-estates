@@ -124,17 +124,17 @@ class EstateSearchWidget extends WP_Widget {
 				</div>
 				<div>
 					<div class="column">
-						<?php $this->createDropdown('action', __('Action', 'estate'), $actions)?>
-						<?php $this->createDropdown('estate_type', __('Type', 'estate'), $types)?>
+						<?php $this->createDropdown('action', __('Action', 'estate'), $actions, "Pārdod")?>
+						<?php $this->createDropdown('estate_type', __('Type', 'estate'), $types, "Dzīvoklis")?>
 						<?php $this->createMinMaxField('area', __('Area', 'estate'), 0); ?>
 					</div>
 					<div class="column">
-						<?php $this->createDropdown('region', __('City/Region', 'estate'), $regions)?>
-						<?php $this->createDropdown('estate_serie', __('Serie', 'estate'), $series)?>
+						<?php $this->createDropdown('region', __('City/Region', 'estate'), $regions, "Rīga")?>
+						<?php $this->createDropdown('estate_serie', __('Serie', 'estate'), $series, ($_GET['type'] == 'Dzīvoklis' || empty($_GET['type'])) ? 'display: block;' : 'display: none;')?>
 						<?php $this->createMinMaxField('price', __('Price', 'estate'), 0); ?>
 					</div>
 					<div class="column">
-						<?php $this->createDropdown('residental', __('Residental complex', 'estate'), $residentals, ($_GET['region'] == 'Riga') ? 'display: block;' : 'display: none;')?>
+						<?php $this->createDropdown('residental', __('Residental complex', 'estate'), $residentals, "", ($_GET['region'] == 'Riga' || empty($_GET['region'])) ? 'display: block;' : 'display: none;')?>
 						<?php $this->createMinMaxField('rooms', __('Rooms', 'estate'), 0); ?>
 						<?php $this->createMinMaxField('floor', __('Floor', 'estate'), 0); ?>
 					</div>
@@ -168,16 +168,16 @@ class EstateSearchWidget extends WP_Widget {
 		<?php
 	}
 
-	public function createDropdown($name, $title, $values, $style = "") {
+	public function createDropdown($name, $title, $values, $default , $style = "") {
 		$selected = empty($_GET[$name]) ? '' : $_GET[$name];
 		?>
 		
 		<div id="<?= $name ?>" style="<?= $style ?>">
 			<label class="field-title"><?= $title ?></label>
 			<select name="<?= $name ?>">
-				<option value="" <?= empty($selected) ? 'selected' : '' ?>><?php __('Select option', 'estate') ?></option>
+				<option value="all" <?= $selected == "all" ? 'selected' : '' ?>><?= __('Search all', 'estate') ?></option>
 				<?php foreach ($values as $value): ?>
-				<option value="<?= $value ?>" <?= ($value == $selected) ? 'selected' : '' ?>><?= $value ?></option>
+				<option value="<?= $value ?>" <?= ($value == $selected) || (empty($selected) && $value == $default) ? 'selected' : '' ?>><?= $value ?></option>
 				<?php endforeach;?>
 			</select>
 		</div>
