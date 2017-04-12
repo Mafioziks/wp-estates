@@ -259,6 +259,42 @@ class EstateSearchWidget extends WP_Widget {
 			);
 		}
 		
+		if (!empty($_GET['min-rooms'])) {
+			$meta[] = array(
+					'key' => 'rooms',
+					'value' => $_GET['min-rooms'],
+					'compare' => '>=',
+					'type' => 'NUMERIC'
+			);
+		}
+		
+		if (!empty($_GET['max-rooms'])) {
+			$meta[] = array(
+					'key' => 'rooms',
+					'value' => $_GET['max-rooms'],
+					'compare' => '<=',
+					'type' => 'NUMERIC'
+			);
+		}
+		
+		if (!empty($_GET['min-floor'])) {
+			$meta[] = array(
+					'key' => 'floor',
+					'value' => $_GET['min-floor'],
+					'compare' => '>=',
+					'type' => 'NUMERIC'
+			);
+		}
+		
+		if (!empty($_GET['max-floor'])) {
+			$meta[] = array(
+					'key' => 'floor',
+					'value' => $_GET['max-floor'],
+					'compare' => '<=',
+					'type' => 'NUMERIC'
+			);
+		}
+		
 		$metaQuery = [];
 		
 		if (count($meta) > 1) {
